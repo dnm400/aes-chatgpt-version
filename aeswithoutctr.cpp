@@ -205,9 +205,6 @@ int main() {
     getline(cin, plainin);
     vector<vector<uint8_t>> varsub(4, vector<uint8_t>(4));
     strtomat(plainin, varsub);
-    SubBytes(varsub);
-    string sub = mattostr(varsub);  
-    cout << sub;
 
     // Pad plaintext if necessary to fit blocks
 
@@ -221,6 +218,8 @@ int main() {
 
         // Initial AddRoundKey
        AddRoundKey(plaintext, key);
+       string var1 = mattostr(plaintext);
+       cout << var1;
 
         // AES Rounds (assuming Nr=10)
         for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
