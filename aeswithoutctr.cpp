@@ -205,9 +205,9 @@ int main() {
     getline(cin, plainin);
     vector<vector<uint8_t>> varsub(4, vector<uint8_t>(4));
     strtomat(plainin, varsub);
+    SubBytes(varsub);
     string sub = mattostr(varsub);  
     cout << sub;
-    SubBytes(varsub);  
 
     // Pad plaintext if necessary to fit blocks
 
