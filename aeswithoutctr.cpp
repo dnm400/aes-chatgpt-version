@@ -238,9 +238,7 @@ int main() {
             plaintext[2][j] = vec2[j];
             plaintext[3][j] = vec3[j];
         }
-        string mixvar = mattostr(plaintext);
-        cout << mixvar << endl;
-
+    
         updateCipher(key, Rcon[i - 1]);
 
         AddRoundKey(plaintext, key);
