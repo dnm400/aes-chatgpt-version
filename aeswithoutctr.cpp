@@ -131,7 +131,7 @@ void updateCipher(vector<vector<uint8_t>>& updatedkey, uint8_t Rcont ){
     vector<vector<uint8_t>> keyschedule = updatedkey;
     vector<uint8_t> veccolumn(4);
     for(int i = 0; i < 4; ++i){ 
-        veccolumn[i] = keyschedule[i][3];
+        veccolumn[i] = keyschedule[3][i];
     }
     RotWord(veccolumn);
     for(int i = 0; i < 4; ++i){
@@ -139,10 +139,10 @@ void updateCipher(vector<vector<uint8_t>>& updatedkey, uint8_t Rcont ){
         }
         veccolumn[0] ^= Rcont;
     for(int i = 0; i < 4; ++i){   
-        updatedkey[i][0] = keyschedule[i][0] ^ veccolumn[i];
-        updatedkey[i][1] = updatedkey[i][0] ^ keyschedule[i][1];
-        updatedkey[i][2] = updatedkey[i][1] ^ keyschedule[i][2];
-        updatedkey[i][3] = updatedkey[i][2] ^ keyschedule[i][3];
+        updatedkey[0][i] = keyschedule[0][i] ^ veccolumn[i];
+        updatedkey[1][i] = updatedkey[0][i] ^ keyschedule[1][i];
+        updatedkey[2][i] = updatedkey[1][i] ^ keyschedule[2][i];
+        updatedkey[3][i] = updatedkey[2][i] ^ keyschedule[3][i];
     }
 
 }  
@@ -165,11 +165,6 @@ using namespace std;
 
 // Function to convert a string of hex digits to a 4x4 matrix of uint8_t values
 void strtomat(const string& hexString, vector<vector<uint8_t>>& matrix) {
-    // Check if the hex string length is exactly 32 characters (16 bytes)
-    if (hexString.length() != 32) {
-        cerr << "Error: Hex string must be exactly 32 characters (16 bytes)" << endl;
-        return;
-    }
 
     // Convert each pair of hex digits to uint8_t and fill the matrix column by column
     for (int i = 0; i < 16; ++i) {
@@ -214,9 +209,7 @@ int main() {
         string block = plainin.substr(m * 32, 32);
         vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
         strtomat(block, plaintext);
-        ShiftRows(plaintext);
-        string shifted = mattostr(plaintext);
-        cout << shifted;
+    
     
 
         // Initial AddRoundKey
@@ -227,13 +220,12 @@ int main() {
         for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
         SubBytes(plaintext);
         ShiftRows(plaintext);
-        string shifted = mattostr(plaintext);
         vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
         for(int j = 0; j < 4; ++j){ 
-            vec0[j] = plaintext[j][0];
-            vec1[j] = plaintext[j][1];
-            vec2[j] = plaintext[j][2];
-            vec3[j] = plaintext[j][3];
+            vec0[j] = plaintext[0][j];
+            vec1[j] = plaintext[1][j];
+            vec2[j] = plaintext[2][j];
+            vec3[j] = plaintext[3][j];
         }
         MixColumns(vec0);
         MixColumns(vec1);
@@ -241,16 +233,19 @@ int main() {
         MixColumns(vec3);
 
         for(int j = 0; j < 4; ++j){ 
-            plaintext[j][0] = vec0[j] ;
-            plaintext[j][1] = vec1[j];
-            plaintext[j][2] = vec2[j];
-            plaintext[j][3] = vec3[j];
+            plaintext[0][j] = vec0[j] ;
+            plaintext[1][j] = vec1[j];
+            plaintext[2][j] = vec2[j];
+            plaintext[3][j] = vec3[j];
         }
         updateCipher(key, Rcon[i - 1]);
+        string keyvar = mattostr(key);
+        cout << keyvar << endl;
+
         AddRoundKey(plaintext, key);
     }   
-
-
+        updateCipher(key, Rcon[9]); 
+        
         // Final round (no MixColumns)
         SubBytes(plaintext);
         ShiftRows(plaintext);
