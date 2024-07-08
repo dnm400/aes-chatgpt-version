@@ -157,16 +157,29 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
 } 
 
 
-void strtomat(string &str, vector<vector<uint8_t>> &mat) { 
-    stringstream ss(str); 
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            unsigned int var;
-            ss >> hex >> var;
-            mat[i][j] = static_cast<uint8_t>(var);
-        }
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Function to convert a string of hex digits to a 4x4 matrix of uint8_t values
+void strtomat(const string& hexString, vector<vector<uint8_t>>& matrix) {
+    // Check if the hex string length is exactly 32 characters (16 bytes)
+    if (hexString.length() != 32) {
+        cerr << "Error: Hex string must be exactly 32 characters (16 bytes)" << endl;
+        return;
+    }
+
+    // Convert each pair of hex digits to uint8_t and fill the matrix
+    for (int i = 0; i < 16; ++i) {
+        char hexPair[3] = { hexString[2*i], hexString[2*i + 1], '\0' };
+        matrix[i % 4][i / 4] = static_cast<uint8_t>(strtoul(hexPair, nullptr, 16));
     }
 }
+
+
+
 
 string mattostr(vector<vector<uint8_t>> &mat) {
     stringstream ss;
