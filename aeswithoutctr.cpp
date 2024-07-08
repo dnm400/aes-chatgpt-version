@@ -70,20 +70,20 @@ for (int i = 0; i < 4; ++i){
 void ShiftRows(vector<vector<uint8_t>>& newst) { //vector of vectors provides matrix
     //second row, one left shift
     vector<vector<uint8_t>> temp = newst;
-    newst[1][0] = temp[1][1];
-    newst[1][1] = temp[1][2];
-    newst[1][2] = temp[1][3];
-    newst[1][3] = temp[1][0];
+    newst[0][1] = temp[1][1];
+    newst[1][1] = temp[2][1];
+    newst[2][1] = temp[3][1];
+    newst[3][1] = temp[0][1];
     //third row, two shift
-    newst[2][0] = temp[2][2];
-    newst[2][1] = temp[2][3];
-    newst[2][2] = temp[2][0];
-    newst[2][3] = temp[2][1];
+    newst[0][2] = temp[2][2];
+    newst[1][2] = temp[3][2];
+    newst[2][2] = temp[0][2];
+    newst[3][2] = temp[1][2];
     //fourth row, three shift
-    newst[3][0] = temp[3][3];
-    newst[3][1] = temp[3][0];
-    newst[3][2] = temp[3][1];
-    newst[3][3] = temp[3][2];
+    newst[0][3] = temp[3][3];
+    newst[1][3] = temp[0][3];
+    newst[2][3] = temp[1][3];
+    newst[3][3] = temp[2][3];
 }
 
 void RotWord(vector<uint8_t>& rotw){
@@ -214,12 +214,14 @@ int main() {
         string block = plainin.substr(m * 32, 32);
         vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
         strtomat(block, plaintext);
+        ShiftRows(plaintext);
+        string shifted = mattostr(plaintext);
+        cout << shifted;
     
 
         // Initial AddRoundKey
        AddRoundKey(plaintext, key);
-       string var1 = mattostr(plaintext);
-       cout << var1;
+
 
         // AES Rounds (assuming Nr=10)
         for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
