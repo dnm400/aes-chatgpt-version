@@ -239,13 +239,11 @@ int main() {
             plaintext[3][j] = vec3[j];
         }
         updateCipher(key, Rcon[i - 1]);
-        string keyvar = mattostr(key);
-        cout << keyvar << endl;
 
         AddRoundKey(plaintext, key);
     }   
-        updateCipher(key, Rcon[9]); 
-        
+        updateCipher(key, Rcon[Nr-1]); 
+
         // Final round (no MixColumns)
         SubBytes(plaintext);
         ShiftRows(plaintext);
