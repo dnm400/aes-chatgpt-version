@@ -171,12 +171,13 @@ void strtomat(const string& hexString, vector<vector<uint8_t>>& matrix) {
         return;
     }
 
-    // Convert each pair of hex digits to uint8_t and fill the matrix
+    // Convert each pair of hex digits to uint8_t and fill the matrix column by column
     for (int i = 0; i < 16; ++i) {
         char hexPair[3] = { hexString[2*i], hexString[2*i + 1], '\0' };
-        matrix[i % 4][i / 4] = static_cast<uint8_t>(strtoul(hexPair, nullptr, 16));
+        matrix[i / 4][i % 4] = static_cast<uint8_t>(strtoul(hexPair, nullptr, 16));
     }
 }
+
 
 
 
